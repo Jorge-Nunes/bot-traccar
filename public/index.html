@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <title>Bot Configurator</title>
+        <script>
+
+                var cookie = false;
+
+
+                function get(to){
+                    return new Promise((resolve,reject)=> {
+                        var http = new XMLHttpRequest();
+                        http.open('GET', to, true);
+
+                        http.setRequestHeader('Content-type', 'application/json');
+                        if(cookie){
+                            http.setRequestHeader('Authorization', cookie);
+                        }
+
+                        http.onreadystatechange = function () {//Call a function when the state changes.
+                            if (http.readyState == 4 && http.status == 200) {
+                                resolve(JSON.parse(http.responseText));
+                            }
+                        }
+                        http.send();
+                    });
+                }
+
+                function post(to,data){
+                    return new Promise((resolve,reject)=> {
+                        var http = new XMLHttpRequest();
+                        http.open('POST', to, true);
+
+                        http.setRequestHeader('Content-type', 'application/json');
+                        if(cookie){
+                            http.setRequestHeader('Authorization', cookie);
+                        }
+
+                        http.onreadystatechange = function () {//Call a function when the state changes.
+                            if (http.readyState == 4 && http.status == 200) {
+                               resolve(JSON.parse(http.responseText));
+                            }
+                        }
+                        http.send(JSON.stringify(data));
+                    });
+                }
+
+                function doLogin(){
+                    var username = document.querySelector("#email").value;
+                    var password = document.querySelector("#password").value;
+
+
+                    post('/api/login',{username, password}).then((r)=>{
+                        if(r.success){
+                            cookie = r.cookie;
+
+                            document.querySelector("#login").style.display = 'none';
+                            document.querySelector("#logged").style.display = 'block';
+
+                            getQrCode();
+                        }else{
+                            alert(r.msg);
+                            document.querySelector("#login").style.display = 'block';
+                            document.querySelector("#logged").style.display = 'none';
+                        }
+                    })
+                }
+
+                function doDisconnect(){
+                    get('/api/disconnect').then((r)=>{
+
+                    });
+                }
+
+                var qrTimer = false;
+                function getQrCode() {
+                   qrTimer = window.setInterval(() => {
+                        get('/api/qrcode').then((r) => {
+                            if (r.success === 'notLogged') {
+                                document.querySelector("#qrcode").innerHTML = '<img src="' + r.qrcode + '">';
+                                document.querySelector("#disconnect").style.display = 'none';
+                            } else {
+                                document.querySelector("#qrcode").innerHTML = 'Você está conectado. (' + r.success + ')';
+                                document.querySelector("#disconnect").style.display = 'block';
+                            }
+                        });
+                    }, 5000)
+                }
+        </script>
+        <style>
+            body{
+                text-align: center;
+            }
+
+            #login,#logged{
+                margin: 50px auto;
+                width: 40%;
+            }
+
+            input{
+                width: 100%;
+                height: 40px;
+                border: silver 1px solid;
+                border-radius: 5px;
+                margin-bottom: 10px;
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="login">
+            <div style="font-size: 20px; padding-bottom: 30px;">Digite seu nome de usuário e senha administrativo do Traccar para liberar o whatsapp.</div>
+
+            <input type="text" id="email" placeholder="seu e-mail"><br>
+            <input type="password" id="password" placeholder="sua senha"><br>
+            <input type="button" id="btn" onclick="doLogin()" value="Validar"><br>
+        </div>
+        <div id="logged" style="display: none;">
+            <div style="font-size: 20px; padding-bottom: 30px;">Faça o scan do QRCode com o seu Whatsapp.</div>
+
+            <div id="qrcode">
+
+            </div>
+
+            <input type="button" id="disconnect" style="display: none;margin-top: 10px;" onclick="doDisconnect()" value="Desconectar"><br>
+        </div>
+    </body>
+</html>
