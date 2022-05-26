@@ -1,0 +1,12 @@
+2022/04/15-09:44:55.458 16f0 Reusing MANIFEST C:\Users\Lincon\Desktop\wpp-bot\tokens\Traccar\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2022/04/15-09:44:55.459 16f0 Recovering log #7
+2022/04/15-09:44:55.506 16f0 Reusing old log C:\Users\Lincon\Desktop\wpp-bot\tokens\Traccar\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000007.log 
+2022/04/15-09:45:06.901 16f0 Level-0 table #12: started
+2022/04/15-09:45:06.941 16f0 Level-0 table #12: 1210297 bytes OK
+2022/04/15-09:45:06.947 16f0 Delete type=0 #7
+2022/04/15-09:45:07.846 14c4 Compacting 1@1 + 1@2 files
+2022/04/15-09:45:07.902 14c4 Generated table #13@1: 28609 keys, 1448768 bytes
+2022/04/15-09:45:07.902 14c4 Compacted 1@1 + 1@2 files => 1448768 bytes
+2022/04/15-09:45:07.906 14c4 compacted to: files[ 0 0 1 0 0 0 0 ]
+2022/04/15-09:45:07.906 14c4 Delete type=2 #9
+2022/04/15-09:45:07.907 14c4 Delete type=2 #12
